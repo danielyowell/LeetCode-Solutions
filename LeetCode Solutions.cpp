@@ -6,6 +6,7 @@
 #include <vector>
 #include <string>
 #include <list>
+#include <stack>
 using namespace std;
 
 // CUSTOM SLL (for 0002)
@@ -203,12 +204,80 @@ class Solution {
         It's valid if the brackets open and close in a manner that makes intuitive sense.
             valid ex: "()[]{}", "({})", "()[()]"
             invalid ex: "(}", "[(])", "{"
+        Constraint: string consists only of brackets.
+
+        Hints:
+        1. Use a stack of characters.
+        2. When you encounter an opening bracket, push it to the top of the stack.
+        3. When you encounter a closing bracket, check if the top of the stack was the opening for it. 
+           If yes, pop it from the stack. Otherwise, return false.
         */
             bool isValid(string s) {
-
+                stack<char> stack; // naming a stack "stack" causes gradescope issues. is leetcode ok?
+                //cout << "stack created" << endl;
+                int rounds = 0;
+                int squares = 0;
+                int curls = 0;
+                for (int x = 0; x < s.size(); x++) {
+                    // if an opening bracket
+                    switch (s.at(x)) {
+                    case ('('):
+                        rounds++;
+                        stack.push(s.at(x));
+                        break;
+                    case ('['):
+                        squares++;
+                        stack.push(s.at(x));
+                        break;
+                    case ('{'):
+                        curls++;
+                        stack.push(s.at(x));
+                        break;
+                    case (')'):
+                    case (']'):
+                    case ('}'):
+                        // edge case: is the stack empty?
+                        if (stack.empty()) {
+                            return false;
+                        }
+                        // check if brackets match for all 3 possible types
+                        if (stack.top() == '(' && s.at(x) == ')') {
+                            //cout << "stack.top() is " << stack.top() << " and s.at(x) is " << s.at(x) << endl;
+                            rounds--;
+                            stack.pop();
+                        }
+                        else if (stack.top() == '[' && s.at(x) == ']') {
+                            //cout << "stack.top() is " << stack.top() << " and s.at(x) is " << s.at(x) << endl;
+                            squares--;
+                            stack.pop();
+                        }
+                        else if (stack.top() == '{' && s.at(x) == '}') {
+                            //cout << "stack.top() is " << stack.top() << " and s.at(x) is " << s.at(x) << endl;
+                            curls--;
+                            stack.pop();
+                        }
+                        else {
+                            return false;
+                        }
+                        break;
+                    default:
+                        break;
+                    }
+                }
+                if (rounds == 0 && squares == 0 && curls == 0) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
             }
             void s0020() {
-
+                if (isValid("(()]")) {
+                    cout << "true" << endl;
+                }
+                else {
+                    cout << "false" << endl;
+                }
             }
         // 0021
             ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
@@ -282,6 +351,59 @@ class Solution {
                 ListNode* list2 = s.createList({ 1, 3, 4 });
                 p.print(mergeTwoLists(list1, list2));
             }
+        // 0026
+        /*
+        Given an integer array nums sorted in non-decreasing order, 
+        remove the duplicates in-place such that each unique element appears only once. 
+
+        Before: [0,0,1,1,1,2,2,3,3,4]
+        After:  [0,1,2,3,4,_,_,_,_,_] // "_" = any number. doesn't matter
+
+        Do NOT allocate extra space for another array. 
+        You must do this by modifying the input array in-place with O(1) extra memory.
+        */
+            int removeDuplicates(vector<int>& nums) {
+                /*
+                Start at index 1. Compare to index 0.
+                If the same number, skip. Otherwise, continue.
+                Every time a new number is found, add it at index idx, then increment idx.
+                */
+                int idx = 1;
+                for (int i = 1; i < nums.size(); i++) {
+                    if (nums.at(i) != nums.at(i-1)) {
+                        nums.at(idx) = nums.at(i);
+                        idx++;
+                    }
+                }
+                return idx;
+            }
+            void s0026() {
+                vector<int> nums = {0, 0, 1, 1, 1, 2, 2, 3, 3, 4}; // Input array
+                vector<int> expectedNums = {0, 1, 2, 3, 4}; // The expected answer with correct length
+
+                int k = removeDuplicates(nums); // Calls your implementation
+                //cout << "successful call" << endl;
+
+                //cout << "vector<int> nums:" << endl; p.print(nums);
+
+                bool status = true;
+
+                if (k != expectedNums.size()) {
+                    status = false;
+                }
+                for (int i = 0; i < k; i++) {
+                    if (nums[i] != expectedNums[i]) {
+                        //cout << "false: " << nums[i] << " != " << expectedNums[i] << endl;
+                        status = false;
+                    }
+                }
+                if (status) {
+                    cout << "good job" << endl;
+                }
+                else {
+                    cout << "mission failed" << endl;
+                }
+            }
 };
 
 // USED FOR TESTING SOLUTIONS
@@ -290,7 +412,7 @@ int main()
     Solution s;
 
     //************
-    int test = 21;   // INPUT TEST NUMBER HERE
+    int test = 26;   // INPUT TEST NUMBER HERE
     //************
 
     switch (test) {
@@ -306,11 +428,14 @@ int main()
     case 14: // 0014 - longest common prefix  - COMPLETED
         s.s0014();
         break;
-    case 20: // 0021 - bracket closure
+    case 20: // 0021 - bracket closure        - COMPLETED
         s.s0020();
         break;
     case 21: // 0021 - merge 2 sorted lists   - COMPLETED
         s.s0021();
+        break;
+    case 26: // 0026 - remove sorted dupes    - COMPLETED
+        s.s0026();
         break;
     /*
     MEDIUM
