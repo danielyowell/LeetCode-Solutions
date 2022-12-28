@@ -351,6 +351,13 @@ class Solution {
                 ListNode* list2 = s.createList({ 1, 3, 4 });
                 p.print(mergeTwoLists(list1, list2));
             }
+        //
+            vector<string> generateParenthesis(int n) {
+
+            }
+            void s0022() {
+            
+            }
         // 0026
         /*
         Given an integer array nums sorted in non-decreasing order, 
@@ -404,6 +411,121 @@ class Solution {
                     cout << "mission failed" << endl;
                 }
             }
+        // 0035 LMFAO THIS ONE WAS SO EASY HOW DID YOU NOT GET IT IMMEDIATELY LMFAOOOOO
+            int searchInsert(vector<int>& nums, int target) {
+                for (int x = 0; x < nums.size(); x++) {
+                    if (nums.at(x) >= target) {
+                        return x;
+                    }
+                }
+                return nums.size();
+            }
+            void s0035() {
+                vector<int> nums = {1, 3, 5, 6};
+                int target = 5;
+                cout << "index: " << searchInsert(nums, target) << endl;
+            }
+        // 0058
+            int lengthOfLastWord(string s) {
+                // assumes that string has minimum word length 1
+                int counter = 0;
+                bool spaced = false;
+                for (int x = 0; x < s.size(); x++) {
+                    if (s.at(x) == ' ') { // at space
+                        spaced = true;
+                    }
+                    else {                // at valid char
+                        if (spaced == true) {
+                            spaced = false;
+                            counter = 1;
+                        }
+                        else {
+                            counter++;
+                        }
+                    }
+                }
+                return counter;
+            }
+            void s0058() {
+                string s = "   fly me to   the moon   ";
+                cout << "length of last word is " << lengthOfLastWord(s) << endl;
+            }
+        // 0278
+        /*
+        Find the "first bad version" of a software.
+        (Created custom isBadVersion() function to assist debugging.)
+        */
+            int firstBadVersion(int n) {
+                // modified binary search
+                cout << "initiate binary search" << endl;
+                return binarySearch0278(1, n);
+            }
+            int binarySearch0278(int lowerBound, int upperBound) {
+                // edge case: lower = upper (probably = 1)
+                if (lowerBound == upperBound) {
+                    return lowerBound;
+                }
+                if (upperBound == lowerBound + 1) { // could probably cause infinite loop
+                    if (isBadVersion(lowerBound)) {
+                        return lowerBound;
+                    }
+                    else {
+                        return upperBound;
+                    }
+                }
+                /*
+                the operation "(lowerBound + upperBound) / 2" may cause an integer overflow.
+                this can be re-expressed as lowerBound / 2 + upperBound / 2 [not good, risks rounding twice]
+                    -> lowerBound - lowerBound / 2 + upperBound / 2         [also risks rounding twice]
+                    -> lowerBound + (upperBound - lowerBound) / 2           [good: only rounds once at most]
+                */
+                int mid = lowerBound + ((upperBound - lowerBound) / 2);
+                cout << "lowerBound: " << lowerBound << endl;
+                cout << "upperBound: " << upperBound << endl;
+                cout << "mid: " << mid << endl;
+                
+                if (isBadVersion(mid) == false) { // 0
+                    // search up
+                    cout << "searching up" << endl;
+                    return binarySearch0278(mid, upperBound);
+                }
+                else { // 1
+                    cout << "version at " << mid << " is bad" << endl;
+                    if (isBadVersion(mid-1) == false) { // if previous element is 0
+                        return mid + 1; // add 1 because versions are counted from 1 upwards
+                    }
+                    else {
+                        cout << "searching down" << endl;
+                        // search down
+                        return binarySearch0278(lowerBound, mid);
+                    }
+                }
+            }
+            string versions = "";
+            string construct(int n, int bad) {
+                string output = "";
+                for (int x = 0; x < bad-1; x++) {
+                    output = output + "0";
+                }
+                int leftover = n - bad;
+                for (int x = 0; x <= leftover; x++) {
+                    output = output + "1";
+                }
+                cout << "string: " << output << endl;
+                return output;
+            }
+            bool isBadVersion(int x) {
+                if (versions.at(x) == '0') {
+                    return false;
+                }
+                else return true;
+            }
+            void s0278() {
+                int n = 5;
+                int bad = 4;
+                versions = construct(n, bad);
+                cout << "first bad version: " << firstBadVersion(n) << endl;
+            }
 };
 
 // USED FOR TESTING SOLUTIONS
@@ -412,7 +534,7 @@ int main()
     Solution s;
 
     //************
-    int test = 26;   // INPUT TEST NUMBER HERE
+    int test = 278;   // INPUT TEST NUMBER HERE
     //************
 
     switch (test) {
@@ -437,11 +559,23 @@ int main()
     case 26: // 0026 - remove sorted dupes    - COMPLETED
         s.s0026();
         break;
+    case 35: // 0035 - search insert position - COMPLETED
+        s.s0035();
+        break;
+    case 58: // 0058 - last word in string    - COMPLETED
+        s.s0058();
+        break;
+    case 278: // 0278 - first bad version     - COMPLETED
+        s.s0278();
+        break;
     /*
     MEDIUM
     */
     case 2:  // 0002 - linked list addition   - in progress
         s.s0002();
+        break;
+    case 22:  // 0022 - parentheses combos   - in progress
+        s.s0022();
         break;
     }
 }
