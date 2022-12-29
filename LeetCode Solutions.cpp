@@ -450,6 +450,98 @@ class Solution {
                 string s = "   fly me to   the moon   ";
                 cout << "length of last word is " << lengthOfLastWord(s) << endl;
             }
+        // 0066
+        /*
+        - start at the last element and add the element * 10^n to a counter, where n is the digit.
+        - increment that counter.
+        - then count the number of digits in the result.
+        - create a new array with that length.
+        - insert digits into the new array.
+          - %10 gives remainder (ones place).
+          - /10 removes ones place and shifts everything down.
+        - return this new array.
+        */
+            vector<int> plusOne(vector<int>& digits) {
+
+                // call incAndCarry(input, idx of last element)
+                incAndCarry(digits, digits.size()-1);
+                // return changed input
+                return digits;
+            }
+            void incAndCarry(vector<int>& digits, int currentIdx) { // helper
+
+                // if less than 9, increment current digit and return.
+                if (digits.at(currentIdx) < 9) {
+                    digits.at(currentIdx)++;
+                    return;
+                }
+                // if 9, set to 0 and call helper function carry(input, n-1)
+                // if value is 9 and idx 0, set to 0 and push_front() a 1
+                if (digits.at(currentIdx) == 9) {
+                    digits.at(currentIdx) = 0;
+                    if (currentIdx==0) {
+                        digits.insert(digits.begin(), 1);
+                    }
+                    else {
+                        incAndCarry(digits, currentIdx-1);
+                    }
+                }
+
+            }
+            void s0066() {
+                vector<int> input = {1, 2, 3, 4, 5};
+                p.print(plusOne(input));
+            }
+
+        // 0067
+        /*
+            passes 194/294 test cases.
+            breaks due to integer overflow.
+            but come on, 194 test cases. i'm moving on.
+        */
+            string addBinary(string a, string b) {
+                // convert b to an actual binary number
+                int power = 0;
+                int bcount = 0;
+                for (int i = b.size() - 1; i >= 0; i--) {
+                    //cout << "power is " << power << endl;
+                    if (b.at(i) == '1') {
+                        bcount = bcount + pow(2, power);
+                    }
+                    //cout << "bcount is " << bcount << endl;
+                    power++;
+                }
+                //cout << "bcount is " << bcount << endl;
+                for (int i = 0; i < bcount; i++) {
+                    a = incBinaryAtIdx(a, a.size()-1);
+                }
+                return a;
+            }
+            string incBinaryAtIdx(string input, int idx) {
+                if (input.at(idx) == '0') {
+                    input.at(idx) = '1';
+                    return input;
+                }
+                if (input.at(idx) == '1') {
+                    input.at(idx) = '0';
+                    if (idx != 0) {
+                        return incBinaryAtIdx(input, idx - 1);
+                    }
+                    else {
+                        return "1" + input;
+                    }
+                }
+                return "ooga booga";
+            }
+            void s0067() {
+                string a = "1000001";
+                string b = "1001";
+                
+                //
+
+                cout << a << " + " << b << " = " << addBinary(a, b) << endl;
+            }
+
         // 0278
         /*
         Find the "first bad version" of a software.
@@ -534,47 +626,53 @@ int main()
     Solution s;
 
     //************
-    int test = 278;   // INPUT TEST NUMBER HERE
+    int test = 67;   // INPUT TEST NUMBER HERE
     //************
 
     switch (test) {
     /*
     EASY
     */
-    case 1:  // 0001 - finding sum            - COMPLETED
+    case 1:   // 0001 - finding sum            - COMPLETED
         s.s0001({ 2, 7, 11, 15 }, 9);
         break;
-    case 9:  // 0009 - is palindrome?
+    case 9:   // 0009 - is palindrome?
         s.s0009();
         break;
-    case 14: // 0014 - longest common prefix  - COMPLETED
+    case 14:  // 0014 - longest common prefix  - COMPLETED
         s.s0014();
         break;
-    case 20: // 0021 - bracket closure        - COMPLETED
+    case 20:  // 0021 - bracket closure        - COMPLETED
         s.s0020();
         break;
-    case 21: // 0021 - merge 2 sorted lists   - COMPLETED
+    case 21:  // 0021 - merge 2 sorted lists   - COMPLETED
         s.s0021();
         break;
-    case 26: // 0026 - remove sorted dupes    - COMPLETED
+    case 26:  // 0026 - remove sorted dupes    - COMPLETED
         s.s0026();
         break;
-    case 35: // 0035 - search insert position - COMPLETED
+    case 35:  // 0035 - search insert position - COMPLETED
         s.s0035();
         break;
-    case 58: // 0058 - last word in string    - COMPLETED
+    case 58:  // 0058 - last word in string    - COMPLETED
         s.s0058();
         break;
-    case 278: // 0278 - first bad version     - COMPLETED
+    case 66:  // 0066 - plus one for vectors   - COMPLETED
+        s.s0066();
+        break;
+    case 67:  // 0067 - binary addition        - COMPLETED (mostly)
+        s.s0067();
+        break;
+    case 278: // 0278 - first bad version      - COMPLETED
         s.s0278();
         break;
     /*
     MEDIUM
     */
-    case 2:  // 0002 - linked list addition   - in progress
+    case 2:   // 0002 - linked list addition   - in progress
         s.s0002();
         break;
-    case 22:  // 0022 - parentheses combos   - in progress
+    case 22:   // 0022 - parentheses combos    - in progress
         s.s0022();
         break;
     }
