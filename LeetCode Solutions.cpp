@@ -428,7 +428,7 @@ class Solution {
                     cout << "mission failed" << endl;
                 }
             }
-        // 0035 LMFAO THIS ONE WAS SO EASY HOW DID YOU NOT GET IT IMMEDIATELY LMFAOOOOO
+        // 0035 
             int searchInsert(vector<int>& nums, int target) {
                 for (int x = 0; x < nums.size(); x++) {
                     if (nums.at(x) >= target) {
@@ -450,11 +450,11 @@ class Solution {
         */
             vector<vector<int>> output;
             vector<vector<int>> permute(vector<int>& nums) {
+
                 // the vector "current" represents a single entry.
                 vector<int> current;
 
                 // the vector "remaining" represents all the values in nums that are left.
-                // we will be DEEP COPYing this vector later on so as not to affect other recursions. (or will we?)
                 vector<int> remaining = nums;
 
                 // call perm() on current and remaining. (blank vector and nums)
@@ -462,55 +462,46 @@ class Solution {
 
                 // output is our result vector.
                 return output;
-            }
 
+            }
             /*
-                
+                perm is a recursive function
             */ 
             void perm(vector<int> current, vector<int> remaining) {
-                // let's try deep copying current to see if this clears up.
-                // vector<int> current2(current);
                 
-                cout << "PERM CALLED" << endl;
-                cout << " the absolute state of current: " << endl;
-                p.print(current);
-                cout << " the absolute state of remaining: " << remaining.size()  << endl;
-                p.print(remaining);
+                //cout << "PERM CALLED" << endl;
+                //cout << " the absolute state of current: " << endl;
+                //p.print(current);
+                //cout << " the absolute state of remaining: " << remaining.size()  << endl;
+                //p.print(remaining);
+                
                 // for the length of remaining
                 for (int i = 0; i < remaining.size(); i++) {
-                    // add remaining val at idx i to current
-                    current.push_back(remaining.at(i));
                     
-                    // create copy of remaining, deleting what we just pushed to current
+                    // deep copy current before pushing a new value so things don't get confusing
+                    vector<int> current2(current);
+                    current2.push_back(remaining.at(i));
+                    
+                    // same with remaining
                     vector<int> remaining2(remaining);
                     remaining2.erase(remaining2.begin() + i);
-                    
-                    // is remaining2.size() 0? great! then push current to output.
-                    if (remaining2.size() == 0) {
-                        cout << "***CERTIFIED OUTPUT MOMENT***" << endl;
-                        p.print(current);
-                        output.push_back(current);
-                        return;
-                    }
-                    // otherwise, call perm() again with current and remaining2.
-                    else {
-                        perm(current, remaining2);
-                    }
+
+                    // call recursively.
+                    perm(current2, remaining2);
+                }
+                
+                // once current reaches the same size as remaining, push to output.
+                if (remaining.size() == 0) {
+                    output.push_back(current);
                 }
 
-                // once current reaches the same size as remaining, push to output.
-
-                // 
             }
-
             void s0046() {
                 vector<int> nums;
                 nums.push_back(1);
                 nums.push_back(2);
                 nums.push_back(3);
                 vector<vector<int>> result = permute(nums);
-                //vector<vector<int>> result = { {1, 2, 3}, {3, 4, 5}, {9, 8, 7} };
-                cout << "hello! result.size() is " << result.size() << endl;
                 p.print(result);
             }
         // 0058
@@ -840,9 +831,6 @@ int main()
     case 35:  // 0035 - search insert position - COMPLETED
         s.s0035();
         break;
-    case 46:  // 0046 - permutations           - COMPLETED
-        s.s0046();
-        break;
     case 58:  // 0058 - last word in string    - COMPLETED
         s.s0058();
         break;
@@ -869,6 +857,9 @@ int main()
         break;
     case 22:   // 0022 - parentheses combos    - in progress
         s.s0022();
+        break;
+    case 46:  // 0046 - permutations           - COMPLETED
+        s.s0046();
         break;
     }
 }
