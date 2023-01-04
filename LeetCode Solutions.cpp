@@ -794,7 +794,7 @@ class Solution {
                 vector<string> strs41 = { "rrjk",
                                          "furt",
                                          "guzm" }; // should print 2 (first and last columns)
-                vector<string> strs76 = {"an array of ridiculously long strings are completely unreasonable to test for"};
+                vector<string> strs76 = {"an array of ridiculously long strings that are completely unreasonable to test for"};
                 cout << "columns to be deleted: " << minDeletionSize(strs17) << endl;
             }
 };
