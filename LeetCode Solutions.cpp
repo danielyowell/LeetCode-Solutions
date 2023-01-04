@@ -37,6 +37,13 @@ class Printer {
                 cout << v.at(x) << endl;
             }
         }
+        void print(vector<vector<int>> v) {
+            for (int i = 0; i < v.size(); i++) {
+                cout << "*" << endl;
+                print(v.at(i));
+                cout << "*" << endl;
+            }
+        }
         void print(list<int> l) {
             for (int x : l) {
                 cout << x << endl;
@@ -443,34 +450,57 @@ class Solution {
         */
             vector<vector<int>> output;
             vector<vector<int>> permute(vector<int>& nums) {
-                cout << "BEGIN PERMUTE FUNCTION" << endl;
-                p.print(nums);
+                // the vector "current" represents a single entry.
                 vector<int> current;
-                perm(current, nums);
 
+                // the vector "remaining" represents all the values in nums that are left.
+                // we will be DEEP COPYing this vector later on so as not to affect other recursions. (or will we?)
+                vector<int> remaining = nums;
+
+                // call perm() on current and remaining. (blank vector and nums)
+                perm(current, remaining);
+
+                // output is our result vector.
                 return output;
             }
 
+            /*
+                
+            */ 
             void perm(vector<int> current, vector<int> remaining) {
-                cout << " BEGIN PERM FUNCTION" << endl;
-                cout << " present remaining.size() = " << remaining.size() << endl;
-
-                // vector<int> current2 = current;
-
+                // let's try deep copying current to see if this clears up.
+                // vector<int> current2(current);
+                
+                cout << "PERM CALLED" << endl;
+                cout << " the absolute state of current: " << endl;
+                p.print(current);
+                cout << " the absolute state of remaining: " << remaining.size()  << endl;
+                p.print(remaining);
+                // for the length of remaining
                 for (int i = 0; i < remaining.size(); i++) {
+                    // add remaining val at idx i to current
                     current.push_back(remaining.at(i));
-                    cout << "new current size: " << current.size() << endl;
-                    if (current.size() == remaining.size()) {
-                        cout << "push back!!!" << endl;
+                    
+                    // create copy of remaining, deleting what we just pushed to current
+                    vector<int> remaining2(remaining);
+                    remaining2.erase(remaining2.begin() + i);
+                    
+                    // is remaining2.size() 0? great! then push current to output.
+                    if (remaining2.size() == 0) {
+                        cout << "***CERTIFIED OUTPUT MOMENT***" << endl;
+                        p.print(current);
                         output.push_back(current);
-                        //return;
-                        break;
+                        return;
                     }
+                    // otherwise, call perm() again with current and remaining2.
                     else {
-                        perm(current, remaining);
+                        perm(current, remaining2);
                     }
                 }
 
+                // once current reaches the same size as remaining, push to output.
+
+                // 
             }
 
             void s0046() {
@@ -479,12 +509,9 @@ class Solution {
                 nums.push_back(2);
                 nums.push_back(3);
                 vector<vector<int>> result = permute(nums);
+                //vector<vector<int>> result = { {1, 2, 3}, {3, 4, 5}, {9, 8, 7} };
                 cout << "hello! result.size() is " << result.size() << endl;
-                for (int i = 0; i < result.size(); i++) {
-                    cout << "*" << endl;
-                    p.print(result.at(i));
-                    cout << "*" << endl;
-                }
+                p.print(result);
             }
         // 0058
             int lengthOfLastWord(string s) {
@@ -774,7 +801,7 @@ class Solution {
                 vector<string> strs41 = { "rrjk",
                                          "furt",
                                          "guzm" }; // should print 2 (first and last columns)
-                vector<string> strs76 = {"an array of ridiculously long strings that are completely unreasonable"};
+                vector<string> strs76 = {"an array of ridiculously long strings that i'm not gonna"};
                 cout << "columns to be deleted: " << minDeletionSize(strs17) << endl;
             }
 };
