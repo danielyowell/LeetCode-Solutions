@@ -9,13 +9,23 @@
 #include <stack>
 using namespace std;
 
-// CUSTOM SLL (for 0002)
+// SLL (for 0002)
 struct ListNode {
     int val;
     ListNode* next;
     ListNode() : val(0), next(nullptr) {}
     ListNode(int x) : val(x), next(nullptr) {}
     ListNode(int x, ListNode* next) : val(x), next(next) {}
+};
+
+// BINARY TREE (for 0094)
+struct TreeNode {
+    int val;
+    TreeNode* left;
+    TreeNode* right;
+    TreeNode() : val(0), left(nullptr), right(nullptr) {} // i have no idea how this constructor syntax works but i won't question it
+    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+    TreeNode(int x, TreeNode* left, TreeNode* right) : val(x), left(left), right(right) {}
 };
 
 // PRINTER (used by SOLUTION)
@@ -542,6 +552,48 @@ class Solution {
                 cout << a << " + " << b << " = " << addBinary(a, b) << endl;
             }
 
+        // 0094
+        /*
+          in-order traversal is "go left, visit, go right"
+
+        */
+            vector<int> inorderTraversal(TreeNode* root) {
+                // this function should return a vector of nodes traversed in order
+                vector<int> output;
+                TreeNode* trav = root;
+
+                traverse(trav, output);
+
+                return output;
+            }
+
+            void traverse(TreeNode* trav, vector<int> output) {
+                if (trav->left != nullptr) {
+                    traverse(trav->left, output);
+                }
+                visit(trav, output);
+                if (trav->right != nullptr) {
+                    traverse(trav->right, output);
+                }
+            }
+
+            void visit(TreeNode* node, vector<int> output) {
+                cout << node->val << endl;
+                output.push_back(node->val);
+            }
+
+            void s0094() {
+                // example 1
+                TreeNode* node1 = new TreeNode(1);
+                TreeNode* node2 = new TreeNode(2);
+                TreeNode* node3 = new TreeNode(3);
+                node1->right = node2;
+                node2->left = node3;
+
+                cout << "print: " << endl;
+                p.print(inorderTraversal(node1));
+            }
+
         // 0278
         /*
         Find the "first bad version" of a software.
@@ -618,6 +670,65 @@ class Solution {
                 versions = construct(n, bad);
                 cout << "first bad version: " << firstBadVersion(n) << endl;
             }
+        // 0944
+        /*
+            passes 75/85 test cases
+            i think i'm just gonna move on, i'm really busy tonight
+        */
+            int minDeletionSize(vector<string>& strs) {
+                
+                int count = 0;
+
+                int stringLength = strs.at(0).size();
+                int arraySize = strs.size();
+
+                // iterate through the length of each string
+                for (int x = 0; x < stringLength; x++) {
+                    char current = strs.at(0).at(x);
+                    bool columnDeleted = false;
+                    // iterate through a particular string
+                    for (int y = 1; y < arraySize; y++) {
+                        if (columnDeleted) {
+                            break;
+                        }
+                        current = strs.at(y-1).at(x);
+                        if (strs.at(y).at(x) < current) { // compare chars. should never have value lower than count
+                            cout << strs.at(y).at(x) << " < " << current << endl;
+                            columnDeleted = true;
+                        }
+                        else {
+                            cout << strs.at(y).at(x) << " >= " << current << endl;
+                        }
+                        cout << strs.at(y).at(x) << endl;
+                    }
+                    if (columnDeleted) {
+                        count++;
+                    }
+                }
+                return count;
+            }
+            void s0944() {
+                vector<string> strs = { "abc", 
+                                        "bce", 
+                                        "cae" };  // works, prints 1
+                vector<string> strs1 = { "cba",
+                                         "daf",
+                                         "ghi" }; // works, prints 1
+                vector<string> strs2 = { "zyx",
+                                         "wvu",
+                                         "tsr" }; // works, prints 3
+                vector<string> strs3 = { "a",
+                                         "b",}; // works, prints 3
+                vector<string> strs17 = { "qowfc",
+                                          "spyge",
+                                          "sqbif",
+                                          "vvrkk" };
+                vector<string> strs41 = { "rrjk",
+                                         "furt",
+                                         "guzm" }; // should print 2 (first and last columns)
+                vector<string> strs76 = {"an array of ridiculously long strings that i'm not gonna"};
+                cout << "columns to be deleted: " << minDeletionSize(strs17) << endl;
+            }
 };
 
 // USED FOR TESTING SOLUTIONS
@@ -626,7 +737,7 @@ int main()
     Solution s;
 
     //************
-    int test = 67;   // INPUT TEST NUMBER HERE
+    int test = 94;   // INPUT TEST NUMBER HERE
     //************
 
     switch (test) {
@@ -663,8 +774,14 @@ int main()
     case 67:  // 0067 - binary addition        - COMPLETED (mostly)
         s.s0067();
         break;
+    case 94:  // 0094 - binary treeversal      - in progress
+        s.s0094();
+        break;
     case 278: // 0278 - first bad version      - COMPLETED
         s.s0278();
+        break;
+    case 944: // 0944 - delete columns         - COMPLETED
+        s.s0944();
         break;
     /*
     MEDIUM
