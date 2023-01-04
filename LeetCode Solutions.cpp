@@ -361,7 +361,7 @@ class Solution {
                 ListNode* list2 = s.createList({ 1, 3, 4 });
                 p.print(mergeTwoLists(list1, list2));
             }
-        //
+        // 0022
             vector<string> generateParenthesis(int n) {
 
             }
@@ -435,6 +435,57 @@ class Solution {
                 int target = 5;
                 cout << "index: " << searchInsert(nums, target) << endl;
             }
+        // 0046
+        /*
+        fun with permutations
+
+        i take it back this is not fun this is not fun
+        */
+            vector<vector<int>> output;
+            vector<vector<int>> permute(vector<int>& nums) {
+                cout << "BEGIN PERMUTE FUNCTION" << endl;
+                p.print(nums);
+                vector<int> current;
+                perm(current, nums);
+
+                return output;
+            }
+
+            void perm(vector<int> current, vector<int> remaining) {
+                cout << " BEGIN PERM FUNCTION" << endl;
+                cout << " present remaining.size() = " << remaining.size() << endl;
+
+                // vector<int> current2 = current;
+
+                for (int i = 0; i < remaining.size(); i++) {
+                    current.push_back(remaining.at(i));
+                    cout << "new current size: " << current.size() << endl;
+                    if (current.size() == remaining.size()) {
+                        cout << "push back!!!" << endl;
+                        output.push_back(current);
+                        //return;
+                        break;
+                    }
+                    else {
+                        perm(current, remaining);
+                    }
+                }
+
+            }
+
+            void s0046() {
+                vector<int> nums;
+                nums.push_back(1);
+                nums.push_back(2);
+                nums.push_back(3);
+                vector<vector<int>> result = permute(nums);
+                cout << "hello! result.size() is " << result.size() << endl;
+                for (int i = 0; i < result.size(); i++) {
+                    cout << "*" << endl;
+                    p.print(result.at(i));
+                    cout << "*" << endl;
+                }
+            }
         // 0058
             int lengthOfLastWord(string s) {
                 // assumes that string has minimum word length 1
@@ -502,7 +553,6 @@ class Solution {
                 vector<int> input = {1, 2, 3, 4, 5};
                 p.print(plusOne(input));
             }
-
         // 0067
         /*
             passes 194/294 test cases.
@@ -516,7 +566,7 @@ class Solution {
                 for (int i = b.size() - 1; i >= 0; i--) {
                     //cout << "power is " << power << endl;
                     if (b.at(i) == '1') {
-                        bcount = bcount + pow(2, power);
+                        bcount = bcount + (int)pow(2, power);
                     }
                     //cout << "bcount is " << bcount << endl;
                     power++;
@@ -551,37 +601,30 @@ class Solution {
 
                 cout << a << " + " << b << " = " << addBinary(a, b) << endl;
             }
-
         // 0094
         /*
           in-order traversal is "go left, visit, go right"
+          
+          my first code theoretically worked (except for null inputs), but would not be accepted by leetcode.
+          this is a more efficient solution based on the official LeetCode solution written in Java.
 
+          apparently, creating a vector in one function and passing it to another function fails to preserve
+          the changes made by the second function. here, the output vector is a public field defined in the
+          class rather than in our inorderTraversal function. this doesn't seem to be a problem in Java. weird.
         */
+            vector<int> output0094;
             vector<int> inorderTraversal(TreeNode* root) {
                 // this function should return a vector of nodes traversed in order
-                vector<int> output;
-                TreeNode* trav = root;
-
-                traverse(trav, output);
-
-                return output;
+                traverse(root);
+                return output0094;
             }
-
-            void traverse(TreeNode* trav, vector<int> output) {
-                if (trav->left != nullptr) {
-                    traverse(trav->left, output);
-                }
-                visit(trav, output);
-                if (trav->right != nullptr) {
-                    traverse(trav->right, output);
+            void traverse(TreeNode* trav) {
+                if (trav != nullptr) {
+                    traverse(trav->left);
+                    output0094.push_back(trav->val);
+                    traverse(trav->right);
                 }
             }
-
-            void visit(TreeNode* node, vector<int> output) {
-                cout << node->val << endl;
-                output.push_back(node->val);
-            }
-
             void s0094() {
                 // example 1
                 TreeNode* node1 = new TreeNode(1);
@@ -590,10 +633,15 @@ class Solution {
                 node1->right = node2;
                 node2->left = node3;
 
+                // example 2
+                TreeNode* node0 = nullptr;
+
+                // example 3
+                TreeNode* nodeX = new TreeNode(1);
+
                 cout << "print: " << endl;
                 p.print(inorderTraversal(node1));
             }
-
         // 0278
         /*
         Find the "first bad version" of a software.
@@ -726,7 +774,7 @@ class Solution {
                 vector<string> strs41 = { "rrjk",
                                          "furt",
                                          "guzm" }; // should print 2 (first and last columns)
-                vector<string> strs76 = {"an array of ridiculously long strings that i'm not gonna"};
+                vector<string> strs76 = {"an array of ridiculously long strings that are completely unreasonable"};
                 cout << "columns to be deleted: " << minDeletionSize(strs17) << endl;
             }
 };
@@ -737,7 +785,7 @@ int main()
     Solution s;
 
     //************
-    int test = 94;   // INPUT TEST NUMBER HERE
+    int test = 46;   // INPUT TEST NUMBER HERE
     //************
 
     switch (test) {
@@ -765,6 +813,9 @@ int main()
     case 35:  // 0035 - search insert position - COMPLETED
         s.s0035();
         break;
+    case 46:  // 0046 - permutations           - COMPLETED
+        s.s0046();
+        break;
     case 58:  // 0058 - last word in string    - COMPLETED
         s.s0058();
         break;
@@ -774,7 +825,7 @@ int main()
     case 67:  // 0067 - binary addition        - COMPLETED (mostly)
         s.s0067();
         break;
-    case 94:  // 0094 - binary treeversal      - in progress
+    case 94:  // 0094 - binary treeversal      - COMPLETED
         s.s0094();
         break;
     case 278: // 0278 - first bad version      - COMPLETED
