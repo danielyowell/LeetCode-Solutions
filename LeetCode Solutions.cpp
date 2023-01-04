@@ -97,7 +97,9 @@ class Solution {
                 }
                 return {};
             }
-            void s0001(vector<int> input, int target) {
+            void s0001() {
+                vector<int> input = { 2, 7, 11, 15 };
+                int target = 9;
                 p.print(twoSum(input, target));
             };
         // 0002
@@ -792,7 +794,7 @@ class Solution {
                 vector<string> strs41 = { "rrjk",
                                          "furt",
                                          "guzm" }; // should print 2 (first and last columns)
-                vector<string> strs76 = {"an array of ridiculously long strings that i'm not gonna"};
+                vector<string> strs76 = {"an array of ridiculously long strings are completely unreasonable to test for"};
                 cout << "columns to be deleted: " << minDeletionSize(strs17) << endl;
             }
 };
@@ -811,7 +813,7 @@ int main()
     EASY
     */
     case 1:   // 0001 - finding sum            - COMPLETED
-        s.s0001({ 2, 7, 11, 15 }, 9);
+        s.s0001();
         break;
     case 9:   // 0009 - is palindrome?
         s.s0009();
